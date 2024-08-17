@@ -33,6 +33,16 @@ func checkErr(err error) {
 	}
 }
 
+func GetLocalIP() net.IP {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	checkErr(err)
+	defer conn.Close()
+
+	localAddress := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddress.IP
+}
+
 func handleIn() {
 	go func() {
 		for {
@@ -78,10 +88,13 @@ func main() {
 	})
 
 	listenBtn := widget.NewButton("Listen", func() {
-		conn, err = logic.Listen()
-		checkErr(err)
-		handleIn()
-		window.SetContent(mainBox)
+		window.SetContent(container.NewCenter(container.NewVBox(widget.NewLabel("Waiting..."), widget.NewLabel(GetLocalIP().String()))))
+		go func() {
+			conn, err = logic.Listen()
+			checkErr(err)
+			handleIn()
+			window.SetContent(mainBox)
+		}()
 	})
 
 	menuBtnGrid := container.NewGridWithColumns(2, ipConfirmBtn, listenBtn)
