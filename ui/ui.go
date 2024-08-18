@@ -60,5 +60,7 @@ func InitUi() {
 	menuBox := container.NewVBox(menuLabel, ipInput, menuBtnGrid)
 	global.MenuBoxCent = container.NewCenter(menuBox)
 
-	logic.UpdateChat(logic.Messages, global.ChatBox)
+	// set content to menu and run
+	global.Window.SetContent(global.MenuBoxCent)
+	global.Window.ShowAndRun()
 }
