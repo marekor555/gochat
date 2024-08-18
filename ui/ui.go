@@ -45,7 +45,7 @@ func InitUi() {
 	})
 
 	listenBtn := widget.NewButton("Listen", func() {
-		global.Window.SetContent(container.NewCenter(container.NewVBox(widget.NewLabel("Waiting..."), widget.NewLabel(logic.GetLocalIP().String()))))
+		global.Window.SetContent(container.NewCenter(container.NewVBox(widget.NewLabel("Waiting..."), widget.NewLabel("IP:"+logic.GetLocalIP().String()+global.Port))))
 		go func() {
 			newConn, err := logic.Listen()
 			util.CheckErr(err)

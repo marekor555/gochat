@@ -1,13 +1,14 @@
 package logic
 
 import (
+	"gochat/global"
 	"net"
 
 	"fyne.io/fyne/v2"
 )
 
 func Listen() (net.Conn, error) {
-	listener, err := net.Listen("tcp", ":8080")
+	listener, err := net.Listen("tcp", global.Port)
 	if err != nil {
 		return nil, err
 	}

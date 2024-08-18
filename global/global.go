@@ -17,4 +17,6 @@ var (
 	ChatBox, MainBox, MenuBoxCent *fyne.Container // messages rendered here
 	TextInput                     *widget.Entry
 	ChatBoxScroll                 *container.Scroll
+
+	Port string = ":8080"
 )
