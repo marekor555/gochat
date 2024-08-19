@@ -2,9 +2,8 @@ package logic
 
 import (
 	"gochat/global"
+	"log"
 	"net"
-
-	"fyne.io/fyne/v2"
 )
 
 func Listen() (net.Conn, error) {
@@ -12,10 +11,14 @@ func Listen() (net.Conn, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer listener.Close()
 	conn, err := listener.Accept()
 	if err != nil {
 		return nil, err
 	}
-	fyne.CurrentApp().SendNotification(fyne.NewNotification("Gochat", "Connection succesfull to: "+conn.RemoteAddr().String()))
+	// fyne.CurrentApp().SendNotification(fyne.NewNotification("Gochat", "Connection succesfull to: "+conn.RemoteAddr().String()))
+	log.Println("Connection found succesfully")
+	global.Messages = []global.Message{}
+	global.ConnActive = true
 	return conn, nil
 }

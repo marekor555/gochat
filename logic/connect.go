@@ -2,10 +2,9 @@ package logic
 
 import (
 	"gochat/global"
+	"log"
 	"net"
 	"strings"
-
-	"fyne.io/fyne/v2"
 )
 
 func Connect(ip string) (net.Conn, error) {
@@ -19,6 +18,9 @@ func Connect(ip string) (net.Conn, error) {
 	if err != nil {
 		return nil, err
 	}
-	fyne.CurrentApp().SendNotification(fyne.NewNotification("Gochat", "Connection succesfull to: "+conn.RemoteAddr().String()))
+	// fyne.CurrentApp().SendNotification(fyne.NewNotification("Gochat", "Connection succesfull to: "+conn.RemoteAddr().String()))
+	log.Println("Connected succesfully")
+	global.ConnActive = true
+	global.Messages = []global.Message{}
 	return conn, nil
 }

@@ -5,6 +5,7 @@ import (
 	"gochat/logic"
 	"gochat/ui/layouts"
 	"gochat/util"
+	"log"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -21,8 +22,8 @@ func InitUi() {
 	global.TextInput = widget.NewEntry()
 	sendBtn := widget.NewButton("Send", func() {
 		global.Conn.Write([]byte(global.TextInput.Text))
-		logic.Messages = append(logic.Messages, logic.Message{Name: "You", Text: global.TextInput.Text})
-		logic.UpdateChat(logic.Messages, global.ChatBox)
+		global.Messages = append(global.Messages, global.Message{Name: "You", Text: global.TextInput.Text})
+		logic.UpdateChat(global.Messages, global.ChatBox)
 		global.TextInput.SetText("")
 	})
 	inputBox := container.New(&layouts.InputLayout{}, global.TextInput, sendBtn)
@@ -60,6 +61,7 @@ func InitUi() {
 	menuBox := container.NewVBox(menuLabel, ipInput, menuBtnGrid)
 	global.MenuBoxCent = container.NewCenter(menuBox)
 
+	log.Println("initialized ui, running")
 	// set content to menu and run
 	global.Window.SetContent(global.MenuBoxCent)
 	global.Window.ShowAndRun()

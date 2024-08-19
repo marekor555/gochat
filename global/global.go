@@ -8,8 +8,13 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+type Message struct {
+	Name, Text string
+}
+
 var (
-	Conn net.Conn
+	Conn     net.Conn
+	Messages []Message // raw message data
 
 	Application fyne.App
 	Window      fyne.Window
@@ -18,5 +23,6 @@ var (
 	TextInput                     *widget.Entry
 	ChatBoxScroll                 *container.Scroll
 
-	Port string = ":8080"
+	Port       string = ":8080"
+	ConnActive        = false
 )
