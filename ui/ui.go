@@ -23,7 +23,7 @@ func InitUi() {
 	sendBtn := widget.NewButton("Send", func() {
 		global.Conn.Write([]byte(global.TextInput.Text))
 		global.Messages = append(global.Messages, global.Message{Name: "You", Text: global.TextInput.Text})
-		logic.UpdateChat(global.Messages, global.ChatBox)
+		global.UpdateChat(global.Messages, global.ChatBox)
 		global.TextInput.SetText("")
 	})
 	inputBox := container.New(&layouts.InputLayout{}, global.TextInput, sendBtn)
@@ -48,9 +48,9 @@ func InitUi() {
 	listenBtn := widget.NewButton("Listen", func() {
 		global.Window.SetContent(container.NewCenter(container.NewVBox(widget.NewLabel("Waiting..."), widget.NewLabel("IP:"+logic.GetLocalIP().String()+global.Port))))
 		go func() {
-			newConn, err := logic.Listen()
+			newConnection, err := logic.Listen()
 			util.CheckErr(err)
-			global.Conn = newConn
+			global.Conn = newConnection
 			logic.HandleIn()
 			global.Window.SetContent(global.MainBox)
 		}()

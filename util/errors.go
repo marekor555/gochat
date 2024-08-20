@@ -14,10 +14,13 @@ func CheckErr(err error) {
 	if err != nil {
 		log.Println("ERROR! :", err.Error())
 		if err == io.EOF {
+			log.Println("Disconnected")
 			global.Window.SetContent(container.NewCenter(widget.NewLabel("Disconnected")))
 			time.Sleep(time.Second * 2)
 			global.Conn.Close()
 			global.ConnActive = false
+			global.Messages = []global.Message{}
+			global.UpdateChat(global.Messages, global.ChatBox)
 			global.Window.SetContent(global.MenuBoxCent)
 			return
 		}

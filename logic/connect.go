@@ -20,7 +20,7 @@ func Connect(ip string) (net.Conn, error) {
 	}
 	// fyne.CurrentApp().SendNotification(fyne.NewNotification("Gochat", "Connection succesfull to: "+conn.RemoteAddr().String()))
 	log.Println("Connected succesfully")
-	global.ConnActive = true
 	global.Messages = []global.Message{}
+	global.ConnActive = true
 	return conn, nil
 }

@@ -5,26 +5,17 @@ import (
 	"gochat/util"
 	"log"
 	"net"
-
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/widget"
 )
-
-func UpdateChat(messages []global.Message, chatBox *fyne.Container) {
-	chatBox.Objects = []fyne.CanvasObject{}
-	for _, message := range messages {
-		chatBox.Objects = append(chatBox.Objects, widget.NewLabel(message.Name+": "+message.Text))
-	}
-}
 
 func HandleIn() {
 	go func() {
 		for global.ConnActive {
 			buffer := make([]byte, 128)
-			_, err := global.Conn.Read(buffer) // TODO: remove blank message when reconnected
+			n, err := global.Conn.Read(buffer) // TODO: remove blank message when reconnected
 			util.CheckErr(err)
+			log.Printf("Recieved: \"%v\",  %v", string(buffer), n)
 			global.Messages = append(global.Messages, global.Message{Name: global.Conn.RemoteAddr().String(), Text: string(buffer)})
-			UpdateChat(global.Messages, global.ChatBox)
+			global.UpdateChat(global.Messages, global.ChatBox)
 			global.ChatBoxScroll.ScrollToBottom()
 		}
 		log.Println("quitting input")
