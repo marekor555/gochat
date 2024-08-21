@@ -1,33 +1,38 @@
 package util
 
 import (
+	"errors"
 	"gochat/global"
 	"io"
 	"log"
+	"syscall"
 	"time"
 
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
+func gracefullFail(message string) {
+	log.Println("ERROR: ", message)
+	global.Window.SetContent(container.NewCenter(widget.NewLabel(message)))
+	time.Sleep(time.Second * 2)
+	if global.ConnActive {
+		global.Conn.Close()
+		global.ConnActive = false
+		global.Messages = []global.Message{}
+		global.UpdateChat(global.Messages, global.ChatBox)
+	}
+	global.Window.SetContent(global.MenuBoxCent)
+}
+
 func CheckErr(err error) {
 	if err != nil {
-		log.Println("ERROR! :", err.Error())
 		if err == io.EOF {
-			log.Println("Disconnected")
-			global.Window.SetContent(container.NewCenter(widget.NewLabel("Disconnected")))
-			time.Sleep(time.Second * 2)
-			global.Conn.Close()
-			global.ConnActive = false
-			global.Messages = []global.Message{}
-			global.UpdateChat(global.Messages, global.ChatBox)
-			global.Window.SetContent(global.MenuBoxCent)
-			return
+			gracefullFail("Disconnected")
+		} else if errors.Is(err, syscall.ECONNREFUSED) {
+			gracefullFail("Connection refused")
+		} else {
+			gracefullFail(err.Error())
 		}
-		if global.Conn != nil {
-			global.Conn.Close()
-		}
-		log.Println("Couldn't handle error quiting...")
-		global.Application.Quit()
 	}
 }

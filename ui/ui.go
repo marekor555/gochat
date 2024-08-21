@@ -43,11 +43,17 @@ func InitUi() {
 	ipInput := widget.NewEntry()
 
 	ipConfirmBtn := widget.NewButton("Connect", func() {
-		newConnection, err := logic.Connect(ipInput.Text)
-		util.CheckErr(err)
-		global.Conn = newConnection
-		logic.HandleIn()
-		global.Window.SetContent(global.MainBox)
+		global.Window.SetContent(container.NewCenter(container.NewVBox(widget.NewLabel("Waiting..."))))
+		go func() {
+			newConnection, err := logic.Connect(ipInput.Text)
+			util.CheckErr(err)
+			if newConnection == nil {
+				return
+			}
+			global.Conn = newConnection
+			logic.HandleIn()
+			global.Window.SetContent(global.MainBox)
+		}()
 	})
 
 	listenBtn := widget.NewButton("Listen", func() {
@@ -55,6 +61,9 @@ func InitUi() {
 		go func() {
 			newConnection, err := logic.Listen()
 			util.CheckErr(err)
+			if newConnection == nil {
+				return
+			}
 			global.Conn = newConnection
 			logic.HandleIn()
 			global.Window.SetContent(global.MainBox)
