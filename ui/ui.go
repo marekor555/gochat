@@ -29,6 +29,7 @@ func InitUi() {
 		global.Messages = append(global.Messages, global.Message{Name: "You", Text: global.TextInput.Text})
 		global.UpdateChat(global.Messages, global.ChatBox)
 		global.TextInput.SetText("")
+		global.ChatBoxScroll.ScrollToBottom()
 	})
 	inputBox := container.New(&layouts.InputLayout{}, global.TextInput, sendBtn)
 

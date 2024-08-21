@@ -10,7 +10,7 @@ import (
 func HandleIn() {
 	go func() {
 		for global.ConnActive {
-			buffer := make([]byte, 128)
+			buffer := make([]byte, 2048)
 			n, err := global.Conn.Read(buffer)
 			util.CheckErr(err)
 			if n == 0 {
