@@ -11,8 +11,11 @@ func HandleIn() {
 	go func() {
 		for global.ConnActive {
 			buffer := make([]byte, 128)
-			n, err := global.Conn.Read(buffer) // TODO: remove blank message when reconnected
+			n, err := global.Conn.Read(buffer)
 			util.CheckErr(err)
+			if n == 0 {
+				continue
+			}
 			log.Printf("Recieved: \"%v\",  %v", string(buffer), n)
 			global.Messages = append(global.Messages, global.Message{Name: global.Conn.RemoteAddr().String(), Text: string(buffer)})
 			global.UpdateChat(global.Messages, global.ChatBox)

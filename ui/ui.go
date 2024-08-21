@@ -6,6 +6,7 @@ import (
 	"gochat/ui/layouts"
 	"gochat/util"
 	"log"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -21,6 +22,9 @@ func InitUi() {
 	// chat gui
 	global.TextInput = widget.NewEntry()
 	sendBtn := widget.NewButton("Send", func() {
+		if strings.TrimSpace(global.TextInput.Text) == "" {
+			return
+		}
 		global.Conn.Write([]byte(global.TextInput.Text))
 		global.Messages = append(global.Messages, global.Message{Name: "You", Text: global.TextInput.Text})
 		global.UpdateChat(global.Messages, global.ChatBox)
