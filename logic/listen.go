@@ -20,5 +20,9 @@ func Listen() (net.Conn, error) {
 	log.Println("Connection found succesfully")
 	global.Messages = []global.Message{}
 	global.ConnActive = true
+	buff := make([]byte, 1024)
+	conn.Write([]byte(global.NameEntry.Text))
+	conn.Read(buff)
+	global.MessengerName = string(buff)
 	return conn, nil
 }

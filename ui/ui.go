@@ -11,13 +11,14 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
 
 func InitUi() {
 	global.Application = app.New()
 	global.Window = global.Application.NewWindow("Gochat")
-	global.Window.Resize(fyne.NewSize(512, 512))
+	global.Window.Resize(fyne.NewSize(0, 512))
 
 	// chat gui
 	global.TextInput = widget.NewEntry()
@@ -40,12 +41,20 @@ func InitUi() {
 
 	// main menu
 	menuLabel := widget.NewLabel("Gochat, safe chat with p2p")
-	ipInput := widget.NewEntry()
+	menuLabelWrap := container.NewHBox(layout.NewSpacer(), menuLabel, layout.NewSpacer())
+
+	ipInputLabel := widget.NewLabel("IP:")
+	ipInputEntry := widget.NewEntry()
+	ipInputWrap := container.New(&layouts.EntryLayout{}, ipInputLabel, ipInputEntry)
+
+	nameLabel := widget.NewLabel("Name:")
+	global.NameEntry = widget.NewEntry()
+	nameWrap := container.New(&layouts.EntryLayout{}, nameLabel, global.NameEntry)
 
 	ipConfirmBtn := widget.NewButton("Connect", func() {
 		global.Window.SetContent(container.NewCenter(container.NewVBox(widget.NewLabel("Waiting..."))))
 		go func() {
-			newConnection, err := logic.Connect(ipInput.Text)
+			newConnection, err := logic.Connect(ipInputEntry.Text)
 			util.CheckErr(err)
 			if newConnection == nil {
 				return
@@ -72,7 +81,7 @@ func InitUi() {
 
 	menuBtnGrid := container.NewGridWithColumns(2, ipConfirmBtn, listenBtn)
 
-	menuBox := container.NewVBox(menuLabel, ipInput, menuBtnGrid)
+	menuBox := container.NewVBox(menuLabelWrap, nameWrap, ipInputWrap, menuBtnGrid)
 	global.MenuBoxCent = container.NewCenter(menuBox)
 
 	log.Println("initialized ui, running")

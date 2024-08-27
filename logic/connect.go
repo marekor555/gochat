@@ -22,5 +22,9 @@ func Connect(ip string) (net.Conn, error) {
 	log.Println("Connected succesfully")
 	global.Messages = []global.Message{}
 	global.ConnActive = true
+	buff := make([]byte, 1024)
+	conn.Read(buff)
+	global.MessengerName = string(buff)
+	conn.Write([]byte(global.NameEntry.Text))
 	return conn, nil
 }

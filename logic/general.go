@@ -17,7 +17,7 @@ func HandleIn() {
 				continue
 			}
 			log.Printf("Recieved: \"%v\",  %v", string(buffer), n)
-			global.Messages = append(global.Messages, global.Message{Name: global.Conn.RemoteAddr().String(), Text: string(buffer)})
+			global.Messages = append(global.Messages, global.Message{Name: global.MessengerName, Text: string(buffer)})
 			global.UpdateChat(global.Messages, global.ChatBox)
 			global.ChatBoxScroll.ScrollToBottom()
 		}

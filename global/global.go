@@ -33,9 +33,10 @@ var (
 	Window      fyne.Window
 
 	ChatBox, MainBox, MenuBoxCent *fyne.Container // messages rendered here
-	TextInput                     *widget.Entry
+	TextInput, NameEntry          *widget.Entry
 	ChatBoxScroll                 *container.Scroll
 
-	Port       string = ":8080"
-	ConnActive        = false
+	MessengerName string = ""
+	Port          string = ":8080"
+	ConnActive           = false
 )
