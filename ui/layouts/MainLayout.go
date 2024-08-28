@@ -16,9 +16,12 @@ func (d *MainLayout) MinSize(objects []fyne.CanvasObject) fyne.Size {
 }
 
 func (d *MainLayout) Layout(objects []fyne.CanvasObject, containerSize fyne.Size) {
-	objects[0].Resize(fyne.NewSize(containerSize.Width, containerSize.Height-40))
+	objects[0].Resize(fyne.NewSize(containerSize.Width, 40))
 	objects[0].Move(fyne.NewPos(0, 0))
 
-	objects[1].Resize(fyne.NewSize(containerSize.Width, 40))
-	objects[1].Move(fyne.NewPos(0, containerSize.Height-40))
+	objects[1].Resize(fyne.NewSize(containerSize.Width, containerSize.Height-80))
+	objects[1].Move(fyne.NewPos(0, 40))
+
+	objects[2].Resize(fyne.NewSize(containerSize.Width, 40))
+	objects[2].Move(fyne.NewPos(0, containerSize.Height-40))
 }

@@ -37,7 +37,13 @@ func InitUi() {
 	global.ChatBox = container.NewVBox()
 	global.ChatBoxScroll = container.NewScroll(global.ChatBox)
 
-	global.MainBox = container.New(&layouts.MainLayout{}, global.ChatBoxScroll, inputBox)
+	global.MainBox = container.New(&layouts.MainLayout{}, container.NewHBox(widget.NewButton("Quit", func() {
+		global.Window.SetContent(global.MenuBoxCent)
+		global.Conn.Close()
+		global.ConnActive = false
+		global.Messages = []global.Message{}
+		global.UpdateChat(global.Messages, global.ChatBox)
+	})), global.ChatBoxScroll, inputBox)
 
 	// main menu
 	menuLabel := widget.NewLabel("Gochat, safe chat with p2p")
@@ -49,6 +55,7 @@ func InitUi() {
 
 	nameLabel := widget.NewLabel("Name:")
 	global.NameEntry = widget.NewEntry()
+	global.NameEntry.Text = "Unknown"
 	nameWrap := container.New(&layouts.EntryLayout{}, nameLabel, global.NameEntry)
 
 	ipConfirmBtn := widget.NewButton("Connect", func() {

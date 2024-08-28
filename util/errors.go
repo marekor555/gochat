@@ -5,6 +5,7 @@ import (
 	"gochat/global"
 	"io"
 	"log"
+	"strings"
 	"syscall"
 	"time"
 
@@ -13,7 +14,6 @@ import (
 )
 
 func gracefullFail(message string) {
-	log.Println("ERROR: ", message)
 	global.Window.SetContent(container.NewCenter(widget.NewLabel(message)))
 	time.Sleep(time.Second * 2)
 	if global.ConnActive {
@@ -27,12 +27,15 @@ func gracefullFail(message string) {
 
 func CheckErr(err error) {
 	if err != nil {
+		log.Println("ERROR: ", err.Error())
 		if err == io.EOF {
 			gracefullFail("Disconnected")
 		} else if errors.Is(err, syscall.ECONNREFUSED) {
 			gracefullFail("Connection refused")
+		} else if strings.Contains(err.Error(), "use of closed network connection") {
+			gracefullFail("Closed")
 		} else {
-			gracefullFail(err.Error())
+			gracefullFail("Unknown error")
 		}
 	}
 }
