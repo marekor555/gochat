@@ -21,8 +21,8 @@ func Listen() (net.Conn, error) {
 	global.Messages = []global.Message{}
 	global.ConnActive = true
 	buff := make([]byte, 1024)
-	conn.Write([]byte(global.NameEntry.Text))
 	conn.Read(buff)
+	conn.Write([]byte(global.NameEntry.Text))
 	global.MessengerName = string(buff)
 	return conn, nil
 }
