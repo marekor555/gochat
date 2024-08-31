@@ -26,6 +26,9 @@ func InitUi() {
 		if strings.TrimSpace(global.TextInput.Text) == "" {
 			return
 		}
+		if len(global.TextInput.Text) >= 2048 {
+			global.TextInput.Text = global.TextInput.Text[0:2048]
+		}
 		global.Conn.Write([]byte(global.TextInput.Text))
 		global.Messages = append(global.Messages, global.Message{Name: "You", Text: global.TextInput.Text})
 		global.UpdateChat(global.Messages, global.ChatBox)
